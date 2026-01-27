@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Dashboard | HireXtract</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f3c88;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .job-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .job-title {
+            font-size: 22px;
+            color: #1f3c88;
+        }
+
+        .meta {
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 16px;
+            background-color: #1f3c88;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #16306b;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HireXtract – HR Dashboard</h1>
+</header>
+
+<div class="container">
+
+    {% if job_data %}
+        {% for item in job_data %}
+            <div class="job-card">
+                <div class="job-title">{{ item.job.title }}</div>
+                <div class="meta">
+                    Company: {{ item.job.company }} |
+                    Applications: {{ item.applications }}
+                </div>
+
+                <a href="{% url 'analyze_job' item.job.id %}" class="btn">
+                    Analyze Applications
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No jobs found.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply | {{ job.title }}</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f3c88;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        .container {
+            max-width: 700px;
+            background-color: white;
+            margin: 40px auto;
+            padding: 30px 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #1f3c88;
+            margin-bottom: 5px;
+        }
+
+        .job-info {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HireXtract Careers</h1>
+</header>
+
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+        <div style="
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            color: white;
+            background-color: {% if message.tags == 'success' %}#28a745{% else %}#dc3545{% endif %};
+        ">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+    <h2>{{ job.title }}</h2>
+    <div class="job-info">
+        <strong>Company:</strong> {{ job.company }}
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Full Name</label>
+        <input type="text" name="name" required>
+
+        <label>Email Address</label>
+        <input type="email" name="email" required>
+
+        <label>LinkedIn Profile (optional)</label>
+        <input type="url" name="linkedin">
+
+        <label>Upload Resume (PDF)</label>
+        <input type="file" name="resume" accept=".pdf" required>
+
+        <button type="submit" class="submit-btn">Submit Application</button>
+    </form>
+</div>
+
+<footer>
+    © 2026 HireXtract | AI Recruitment Platform
+</footer>
+
+</body>
+</html>

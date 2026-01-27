@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Screening | {{ job.title }}</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f3c88;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .job-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .analyze-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .reject-btn {
+            background-color: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1f3c88;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafc;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #1f3c88;
+        }
+
+        .resume-link {
+            color: #1f3c88;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .resume-link:hover {
+            text-decoration: underline;
+        }
+
+        .no-data {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: #666;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: 600;
+            color: #1f3c88;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HireXtract – AI Screening</h1>
+</header>
+
+<div class="container">
+
+    <!-- JOB INFO -->
+    <div class="job-box">
+        <h2>{{ job.title }}</h2>
+        <p><strong>Company:</strong> {{ job.company }}</p>
+        <p>{{ job.description }}</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button name="action" value="run_ai" class="analyze-btn">
+                Run AI Analysis
+            </button>
+        </form>
+    </div>
+
+    <!-- APPLICATIONS TABLE -->
+    {% if applications %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Candidate</th>
+                    <th>AI Score (%)</th>
+                    <th>AI Insights</th>
+                    <th>Resume</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td>
+                        {% if app.ai_score %}
+                            {{ app.ai_score.rank }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td>{{ app.candidate.name }}</td>
+
+                    <td class="score">
+                        {% if app.ai_score %}
+                            {{ app.ai_score.score }}%
+                        {% else %}
+                            Not analyzed
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if app.ai_score %}
+                            {{ app.ai_score.insights }}
+                        {% else %}
+                            Run AI analysis to generate insights
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <a href="{{ app.resume.url }}" target="_blank" class="resume-link">
+                            View Resume
+                        </a>
+                    </td>
+
+                    <td>
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="application_id" value="{{ app.id }}">
+                            <button name="action" value="invite" class="analyze-btn">
+                                Invite
+                            </button>
+                        </form>
+
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="application_id" value="{{ app.id }}">
+                            <button name="action" value="reject"
+                                    class="analyze-btn reject-btn">
+                                Reject
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-data">
+            No applications found for this job yet.
+        </div>
+    {% endif %}
+
+    <a href="{% url 'hr_dashboard' %}" class="back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
