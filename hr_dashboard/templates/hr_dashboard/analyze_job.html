@@ -123,81 +123,97 @@
         </form>
     </div>
 
-    <!-- APPLICATIONS TABLE -->
-    {% if applications %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Candidate</th>
-                    <th>AI Score (%)</th>
-                    <th>AI Insights</th>
-                    <th>Resume</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for app in applications %}
-                <tr>
-                    <td>
-                        {% if app.ai_score %}
-                            {{ app.ai_score.rank }}
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-
-                    <td>{{ app.candidate.name }}</td>
-
-                    <td class="score">
-                        {% if app.ai_score %}
-                            {{ app.ai_score.score }}%
-                        {% else %}
-                            Not analyzed
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        {% if app.ai_score %}
-                            {{ app.ai_score.insights }}
-                        {% else %}
-                            Run AI analysis to generate insights
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        <a href="{{ app.resume.url }}" target="_blank" class="resume-link">
-                            View Resume
-                        </a>
-                    </td>
-
-                    <td>
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="application_id" value="{{ app.id }}">
-                            <button name="action" value="invite" class="analyze-btn">
-                                Invite
-                            </button>
-                        </form>
-
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="application_id" value="{{ app.id }}">
-                            <button name="action" value="reject"
-                                    class="analyze-btn reject-btn">
-                                Reject
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div class="no-data">
-            No applications found for this job yet.
+<!-- SUCCESS / ERROR MESSAGES -->
+{% if messages %}
+    {% for message in messages %}
+        <div style="background:#d4edda;color:#155724;
+                    padding:12px;border-radius:6px;margin-bottom:15px;">
+            {{ message }}
         </div>
-    {% endif %}
+    {% endfor %}
+{% endif %}
+
+<!-- FILTER -->
+<form method="get" style="margin-bottom:15px;">
+    <label><strong>Show Top:</strong></label>
+
+    <input type="number"
+           name="top"
+           min="1"
+           placeholder="Enter number"
+           value="{{ selected_top }}"
+           style="width:120px;padding:6px;">
+
+    <button type="submit"
+            style="padding:6px 12px;margin-left:8px;">
+        Apply
+    </button>
+</form>
+
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="bulk_invite">
+
+    <button type="submit"
+            style="margin-bottom:15px;
+                   background:#28a745;color:white;
+                   padding:10px 16px;border:none;border-radius:6px;">
+        Invite Selected & Reject Others
+    </button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Rank</th>
+                <th>Candidate</th>
+                <th>AI Score (%)</th>
+                <th>AI Insights</th>
+                <th>Resume</th>
+                <th>Links</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="selected_applications" value="{{ app.id }}">
+                </td>
+
+                <td>{{ app.ai_score.rank|default:"-" }}</td>
+
+                <td>{{ app.candidate.name }}</td>
+
+                <td class="score">
+                    {{ app.ai_score.score|default:"Not analyzed" }}{% if app.ai_score %}%{% endif %}
+                </td>
+
+                <td>
+                    {{ app.ai_score.insights|default:"Run AI analysis to generate insights" }}
+                </td>
+
+                <td>
+                    <a href="{{ app.resume.url }}" target="_blank" class="resume-link">
+                        View Resume
+                    </a>
+                </td>
+
+                <td>
+                    {% if app.candidate.linkedin_url %}
+                        <a href="{{ app.candidate.linkedin_url }}" target="_blank" class="resume-link">
+                            LinkedIn
+                        </a>
+                    {% else %}
+                        <span style="color:#999;">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
 
     <a href="{% url 'hr_dashboard' %}" class="back">
         ← Back to Dashboard
