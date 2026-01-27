@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render,redirect
 from .models import Job
 from candidate.models import Candidate, Application
 from django.contrib import messages
+from django.shortcuts import render
 
 def job_list(request):
     jobs = Job.objects.filter(is_open=True)
@@ -37,3 +38,6 @@ def apply_job(request, job_id):
             return redirect("job_list")
 
     return render(request, "jobs/apply_job.html", {"job": job})
+
+def home(request):
+    return render(request, "jobs/home.html")

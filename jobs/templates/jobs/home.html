@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HireXtract | AI-Powered Recruitment</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(120deg, #eef2ff, #f8f9ff);
+        }
+
+        header {
+            background-color: #1f3c88;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 60px auto;
+            display: flex;
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            flex: 1;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card h2 {
+            color: #1f3c88;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+        }
+
+        .btn-hr {
+            background-color: #dc3545;
+        }
+
+        .btn-candidate {
+            background-color: #28a745;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            padding: 15px;
+            background-color: #eef1f6;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HireXtract</h1>
+    <p>AI-Powered Resume Screening & Smart Recruitment Platform</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>For HR & Recruiters</h2>
+        <p>
+            Post job openings, analyze resumes using AI,
+            rank candidates automatically, and send interview
+            invites with a single click.
+        </p>
+        <a href="{% url 'hr_dashboard' %}" class="btn btn-hr">
+            Go to HR Dashboard
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>For Candidates</h2>
+        <p>
+            Explore open job opportunities, submit your resume,
+            and get evaluated fairly using AI-based screening.
+        </p>
+        <a href="{% url 'job_list' %}" class="btn btn-candidate">
+            View Job Openings
+        </a>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 HireXtract | Intelligent Hiring Made Simple
+</footer>
+
+</body>
+</html>

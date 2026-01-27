@@ -68,6 +68,14 @@
             border-radius: 5px;
             font-size: 14px;
         }
+        .closed {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+        opacity: 1;
+        transition: opacity 0.8s ease;
+        }
+
 
         .close-btn {
             background-color: #dc3545;
@@ -110,7 +118,7 @@
                         Close Job
                     </a>
                 {% else %}
-                    <div class="closed">Job Closed</div>
+                    <div class="closed auto-hide">Job Closed</div>
                 {% endif %}
             </div>
         {% endfor %}
@@ -119,6 +127,15 @@
     {% endif %}
 
 </div>
+<script>
+    setTimeout(function () {
+        const closedMessages = document.querySelectorAll('.auto-hide');
+        closedMessages.forEach(function (msg) {
+            msg.style.display = 'none';
+        });
+    }, 3000); // 3 seconds
+</script>
+
 
 </body>
 </html>
