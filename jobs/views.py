@@ -4,7 +4,7 @@ from candidate.models import Candidate, Application
 from django.contrib import messages
 
 def job_list(request):
-    jobs = Job.objects.all().order_by("-created_at")
+    jobs = Job.objects.filter(is_open=True)
     return render(request, "jobs/job_list.html", {"jobs": jobs})
 
 def apply_job(request, job_id):

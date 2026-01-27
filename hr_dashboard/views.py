@@ -6,7 +6,7 @@ from jobs.models import Job
 from candidate.models import Application
 from hr_dashboard.models import AIScore
 from brainapp.screening import run_ai_screening
-
+from jobs.forms import JobForm
 
 @login_required
 def hr_dashboard(request):
@@ -107,4 +107,25 @@ def analyze_job(request, job_id):
             "selected_top": selected_top,
         }
     )
+
+@login_required
+def add_job(request):
+    if request.method == "POST":
+        form = JobForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Job opening created successfully.")
+            return redirect("hr_dashboard")
+    else:
+        form = JobForm()
+
+    return render(request, "hr_dashboard/add_job.html", {"form": form})
+
+@login_required
+def close_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    job.is_open = False
+    job.save()
+    messages.success(request, "Job opening closed.")
+    return redirect("hr_dashboard")
 
