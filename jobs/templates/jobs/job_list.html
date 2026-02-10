@@ -120,8 +120,23 @@
                 <div class="job-title">{{ job.title }}</div>
                 <div class="company">{{ job.company }}</div>
                 <div class="description">
-                    {{ job.description|truncatewords:35 }}
-                </div>
+    <span id="short-{{ job.id }}">
+        {{ job.description|truncatewords:35 }}
+    </span>
+
+    <span id="full-{{ job.id }}" style="display:none;">
+        {{ job.description }}
+    </span>
+
+    {% if job.description|length > 200 %}
+        <br>
+        <a href="javascript:void(0);" 
+           onclick="toggleDescription('{{ job.id }}')" 
+           style="color:#1f3c88; font-weight:600;">
+            Read more
+        </a>
+    {% endif %}
+</div>
 
                 <a href="{% url 'apply_job' job.id %}" class="apply-btn">
                     Apply Now
@@ -138,6 +153,23 @@
 <footer>
     © 2026 HireXtract | AI-Powered Recruitment System
 </footer>
+<script>
+function toggleDescription(jobId) {
+    const shortText = document.getElementById("short-" + jobId);
+    const fullText = document.getElementById("full-" + jobId);
+
+    if (fullText.style.display === "none") {
+        shortText.style.display = "none";
+        fullText.style.display = "inline";
+        event.target.innerText = "Read less";
+    } else {
+        shortText.style.display = "inline";
+        fullText.style.display = "none";
+        event.target.innerText = "Read more";
+    }
+}
+</script>
+
 
 </body>
 </html>
